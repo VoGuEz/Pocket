@@ -13,16 +13,13 @@ The application is designed for quick, practical personal finance tracking. User
 - Export the current filtered view to CSV
 - Switch between dark/light-themed interfaces
 
-## Product specification
-
 ### Core features
 
-1. Expense entry
-2. Expense management
-3. Filtering and search
-4. Analytics
-5. Reporting and export
-6. Interface and UX
+1. Ability to add expenses 
+2. Able to list expenses
+3. Delete the expense 
+4. Calculate total expenses you have 
+5. Filter expenses by category 
 
 ## Technology stack
 
@@ -34,7 +31,6 @@ The application is designed for quick, practical personal finance tracking. User
 
 ## Project structure
 
-```text
 Pocket/
 ├── backend/
 │   ├── main.py
@@ -48,111 +44,6 @@ Pocket/
 │   └── images/
 ├── .gitignore
 └── README.md
-```
-
-## Backend specification
-
-The backend is implemented in `backend/main.py` and serves both the API and the static frontend assets.
-
-### Database schema
-
-The application uses a single SQLite table named `expenses` with the following shape:
-
-```sql
-CREATE TABLE expenses (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    title TEXT NOT NULL,
-    amount REAL NOT NULL CHECK (amount > 0),
-    category TEXT NOT NULL,
-    date TEXT NOT NULL,
-    note TEXT DEFAULT ''
-)
-```
-
-Notes:
-- The database file is stored at `backend/expenses.db`
-- A date index is created for faster date-based queries
-- The backend also includes migration logic to support schema normalization for legacy data
-
-### API endpoints
-
-#### GET `/api/categories`
-Returns the list of available categories, including default categories and any custom categories already recorded.
-
-#### GET `/api/expenses`
-Returns all expenses matching optional filters.
-
-Query parameters:
-- `category` (optional)
-- `start` (optional ISO date)
-- `end` (optional ISO date)
-- `search` (optional text search)
-
-#### POST `/api/expenses`
-Creates a new expense.
-
-Request body:
-```json
-{
-  "title": "Trotro to Campus",
-  "amount": 14.5,
-  "category": "Transport",
-  "date": "2026-10-03",
-  "note": "Daily commute"
-}
-```
-
-#### DELETE `/api/expenses/{expense_id}`
-Deletes an individual expense record.
-
-#### GET `/api/stats`
-Returns dashboard summary stats and chart-friendly aggregates.
-
-Response includes:
-- total
-- count
-- largest
-- average
-- daily_average
-- by_category
-- by_month
-- by_day
-
-## Default categories
-
-The default category set is:
-
-- Food
-- Transport
-- Books
-- Entertainment
-- Health
-- Shopping
-- Bills
-- Other
-
-## Frontend specification
-
-The frontend is a single-page dashboard that loads from `frontend/index.html` and communicates with the API via `/api` endpoints.
-
-### Dashboard modules
-
-- KPI summary cards
-- Expense form
-- Spending donut chart by category
-- Monthly spending bar chart
-- Daily trend line chart
-- Expense table with search and filters
-- CSV export button
-- Theme selector and toast alerts
-
-## Local development setup
-
-### Prerequisites
-
-- Python 3.11+
-- pip
-- A modern web browser
 
 ### Windows setup
 
@@ -196,17 +87,6 @@ Pocket satisfies the following requirements:
 - The application is intended for single-user local usage rather than multi-user deployment
 - Data is stored locally in SQLite, so it is suitable for personal budgeting and small-scale record-keeping
 - The frontend is static and served by FastAPI, which keeps deployment simple
-
-## Future enhancements
-
-Potential future improvements include:
-
-- User authentication and multiple accounts
-- Recurring expenses and budgets
-- Editable expense entries
-- Import from CSV files
-- Charts with date-range presets and downloadable reports
-- API authentication and remote deployment support
 
 ## License
 
