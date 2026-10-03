@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pocket</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <link rel="icon" type="image/x-icon" href="/static/images/favicon.ico">
+  <script src="/static/chart.umd.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><img class="brand-logo" src="/static/images/pocket.png" alt=""> Pocket</div>
+    <select id="themeSelect" aria-label="Color theme">
+      <option value="system">System</option>
+      <option value="light">Light</option>
+      <option value="dark">Dark Night</option>
+      <option value="lemon">Lemon green</option>
+      <option value="blue">Soothing blue</option>
+    </select>
+  </header>
+
+  <main class="container">
+    <!-- KPI row -->
+    <section class="kpis" aria-label="Summary">
+      <div class="kpi hero"><span class="kpi-label">Total expenses</span><span class="kpi-value" id="kTotal">GH₵0.00</span><span class="kpi-sub" id="kScope">All time</span></div>
+      <div class="kpi"><span class="kpi-label">Transactions</span><span class="kpi-value" id="kCount">0</span></div>
+      <div class="kpi"><span class="kpi-label">Average</span><span class="kpi-value" id="kAvg">GH₵0.00</span></div>
+      <div class="kpi"><span class="kpi-label">Largest</span><span class="kpi-value" id="kMax">GH₵0.00</span></div>
+    </section>
+
+    <div class="layout">
+      <!-- Add form -->
+      <section class="card form-card">
+        <h2>Add expense</h2>
+        <form id="expenseForm" novalidate>
+          <label>Title
+            <input id="title" maxlength="100" placeholder="e.g. Trotro to Campus" required>
+          </label>
+          <div class="row">
+            <label>Amount
+              <input id="amount" type="number" min="0.01" step="0.01" placeholder="0.00" required>
+            </label>
+            <label>Date
+              <input id="date" type="date" required>
+            </label>
+          </div>
+          <label>Category
+            <select id="category" required></select>
+          </label>
+          <label id="customCategoryField" hidden>Custom category
+            <input id="customCategory" maxlength="50" placeholder="e.g. School supplies">
+          </label>
+          <label>Note (optional)
+            <input id="note" maxlength="300" placeholder="What do you want to add">
+          </label>
+          <p id="formError" class="error" role="alert" hidden></p>
+          <button type="submit" class="primary">Add expense</button>
+        </form>
+      </section>
+
+      <!-- Charts -->
+      <section class="charts">
+        <div class="card">
+          <h2>Spending by category</h2>
+          <div class="chart-box donut-box">
+            <canvas id="catChart" aria-label="Donut chart of spending by category" role="img"></canvas>
+            <div class="donut-center"><span id="donutTotal">GH₵0.00</span><small>total</small></div>
+          </div>
+          <ul id="catLegend" class="legend"></ul>
+        </div>
+        <div class="card">
+          <h2>Monthly spending</h2>
+          <div class="chart-box"><canvas id="monthChart" aria-label="Bar chart of monthly spending" role="img"></canvas></div>
+        </div>
+        <div class="card wide">
+          <h2>Daily trend</h2>
+          <div class="chart-box short"><canvas id="dayChart" aria-label="Line chart of daily spending" role="img"></canvas></div>
+        </div>
+      </section>
+    </div>
+
+    <!-- List -->
+    <section class="card">
+      <div class="list-head">
+        <h2>Expenses</h2>
+        <div class="filters">
+          <input id="search" type="search" placeholder="Search…" aria-label="Search expenses">
+          <select id="filterCategory" aria-label="Filter by category"></select>
+          <input id="filterStart" type="date" aria-label="From date">
+          <input id="filterEnd" type="date" aria-label="To date">
+          <button id="clearFilters" class="ghost">Clear</button>
+          <button id="exportCsv" class="ghost">Export CSV</button>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Date</th><th>Title</th><th>Category</th><th class="num">Amount</th><th></th></tr></thead>
+          <tbody id="tbody"></tbody>
+        </table>
+      </div>
+      <p id="empty" class="empty" hidden>No expenses found. Add one to get started.</p>
+    </section>
+  </main>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script src="/static/app.js"></script>
+</body>
+</html>
