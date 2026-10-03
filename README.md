@@ -1,6 +1,6 @@
 # Pocket
 
-Pocket is a project i built for tracking personal expenses .It has FastApi integrated in it with javascipt as the front end. It helps users record daily spending, analyze trends, filter transactions, and export records as CSV while keeping all data locally in SQLite.
+Pocket is a project i built for tracking personal expenses .It has FastApi integrated in it with javascipt as the front end. It helps users record daily spending, analyze trends, filter transactions, and export records as CSV while keeping all data locally in SQLite which has been integrated into the system.
 
 ## Overview 
 
@@ -191,7 +191,7 @@ Pocket satisfies the following requirements:
 - Theme customization and polished dashboard experience
 - No external services required for core usage
 
-## Notes and assumptions
+## Notes
 
 - The application is intended for single-user local usage rather than multi-user deployment
 - Data is stored locally in SQLite, so it is suitable for personal budgeting and small-scale record-keeping
@@ -210,4 +210,4 @@ Potential future improvements include:
 
 ## License
 
-This project is intended for local personal finance tracking and can be adapted for broader use as needed.
+This project is intended for local personal use it can be adapted for broader use as needed.
