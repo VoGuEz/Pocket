@@ -2,6 +2,7 @@ const API = "/api";
 const $ = (id) => document.getElementById(id);
 const css = (v) => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
 const THEMES = ["system", "light", "dark", "lemon", "blue"];
+const BUILT_IN_CATEGORIES = ["Food", "Transport", "Books", "Entertainment", "Health", "Shopping", "Bills", "Other"];
 const moneyFormatter = new Intl.NumberFormat("en-GH", { style: "currency", currency: "GHS" });
 const compactMoneyFormatter = new Intl.NumberFormat("en-GH", {
   style: "currency", currency: "GHS", notation: "compact", maximumFractionDigits: 1,
@@ -161,11 +162,36 @@ function renderCategoryOptions() {
   const filterCategories = ["All", ...categories];
   $("filterCategory").innerHTML = filterCategories
     .map((category) => `<option value="${esc(category)}">${esc(category)}</option>`).join("");
+  const customCategories = categories.filter((category) => !BUILT_IN_CATEGORIES.includes(category));
+  $("customCategories").innerHTML = customCategories.map((category) => `
+    <span class="custom-category">
+      <span>${esc(category)}</span>
+      <button class="del category-delete" type="button" data-category="${esc(category)}" aria-label="Delete ${esc(category)} category" title="Delete ${esc(category)} category">×</button>
+    </span>`).join("");
   if (filterCategories.includes(selectedFilter)) $("filterCategory").value = selectedFilter;
   if (categories.includes(selectedCategory)) $("category").value = selectedCategory;
+  syncCustomCategoryField();
 }
 
 $("category").addEventListener("change", syncCustomCategoryField);
+
+$("customCategories").addEventListener("click", async (ev) => {
+  const button = ev.target.closest(".category-delete");
+  if (!button) return;
+  const category = button.dataset.category;
+  if (!category || !confirm(`Delete the "${category}" category? Its expenses will be moved to Other.`)) return;
+  try {
+    await api("/categories?" + new URLSearchParams({ category }), { method: "DELETE" });
+    categories = await api("/categories");
+    renderCategoryOptions();
+    if ($("category").value === category) $("category").value = BUILT_IN_CATEGORIES[0];
+    syncCustomCategoryField();
+    toast("Category deleted");
+    await refresh();
+  } catch (e) {
+    toast(e.message);
+  }
+});
 
 $("expenseForm").addEventListener("submit", async (ev) => {
   ev.preventDefault();
@@ -185,9 +211,10 @@ $("expenseForm").addEventListener("submit", async (ev) => {
     await api("/expenses", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
     if (!categories.includes(body.category)) {
       categories.push(body.category);
-      renderCategoryOptions();
-      syncCustomCategoryField();
     }
+    renderCategoryOptions();
+    $("category").value = body.category;
+    syncCustomCategoryField();
     $("title").value = ""; $("amount").value = ""; $("note").value = ""; $("customCategory").value = "";
     toast("Expense added");
     await refresh();

@@ -7,6 +7,7 @@ Pocket is a project i built for tracking personal expenses .It has FastApi integ
 The application is designed for quick, practical personal finance tracking. Users can:
 
 - Add new expenses with a title, amount, category, date, and optional note
+- Delete custom categories while keeping their expenses under the built-in Other category
 - Filter expenses by category, date range, and free-text search
 - Delete entries when needed
 - View spending summaries and charts

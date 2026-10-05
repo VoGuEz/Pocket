@@ -45,12 +45,14 @@
               <input id="date" type="date" required>
             </label>
           </div>
-          <label>Category
+          <div class="category-field">
+            <label for="category">Category</label>
             <select id="category" required></select>
-          </label>
+          </div>
           <label id="customCategoryField" hidden>Custom category
             <input id="customCategory" maxlength="50" placeholder="e.g. School supplies">
           </label>
+          <div id="customCategories" class="custom-categories" aria-label="Your custom categories"></div>
           <label>Note (optional)
             <input id="note" maxlength="300" placeholder="What do you want to add">
           </label>

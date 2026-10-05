@@ -109,6 +109,22 @@ def categories():
     return [*CATEGORIES, *saved]
 
 
+@app.delete("/api/categories", status_code=204)
+def delete_category(category: str = Query(..., min_length=1, max_length=50)):
+    category = category.strip()
+    if not category:
+        raise HTTPException(422, "Category cannot be empty")
+    if category in CATEGORIES:
+        raise HTTPException(400, "Built-in categories cannot be deleted")
+    with db() as conn:
+        cur = conn.execute(
+            "UPDATE expenses SET category = ? WHERE category = ?",
+            ("Other", category),
+        )
+        if cur.rowcount == 0:
+            raise HTTPException(404, "Category not found")
+
+
 @app.get("/api/expenses", response_model=list[ExpenseOut])
 def list_expenses(
     category: Optional[str] = None,
